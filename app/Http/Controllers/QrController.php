@@ -13,23 +13,21 @@ class QrController extends Controller
 {
     public function qr()
     {
-        $user = User::find(1);
-
-        return view('welcome', compact('user'));
+        //Test QR Code Welcome
+        return view(view: 'welcome', data: ["user" => $this->testData()]);
     }
 
-    public function downloadQRCode(Request $request, $id)
+    public function downloadQRCode(Request $request)
     {
-        $user = User::find($id);
-
-        $imageName  = 'qr-code';
+        $imageName  = 'qr-code-test';
         $headers    = array('Content-Type' => ['png','svg','eps']);
         $type       = $request->qr_type == 'jpg' || $request->qr_type == 'transparent' ? 'png' : $request->qr_type;
         $image      = QrCode::format($type)
                     ->size(300)->errorCorrection('H')
-                    ->generate($user->name."\n". $user->email);
+                    ->generate($this->testData()["name"]."\n". $this->testData()["email"]);
 
-        Storage::disk('public')->put($imageName, $image);
+
+        Storage::disk(name: 'public')->put($imageName, $image);
 
         if ($request->qr_type == 'jpg') {
             $type = 'jpg';
@@ -39,5 +37,10 @@ class QrController extends Controller
         }
 
         return response()->download('storage/'.$imageName, $imageName.'.'.$type, $headers)->deleteFileAfterSend();
+    }
+
+    private function testData(): array
+    {
+        return ["name" => "TestName", "email" => "test@example.dev"];
     }
 }
