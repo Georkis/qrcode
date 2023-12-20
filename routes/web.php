@@ -15,14 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/create', [ OrderController::class, 'create' ])->name('order.create');
-
 Route::get('/', [ QrController::class, 'qr' ]);
-Route::post('/download-qr/{id}', [ QrController::class, 'downloadQRCode' ])->name('qrcode.download');
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::post('/download-qr/', [ QrController::class, 'downloadQRCode' ])->name('qrcode.download');
 
 Route::middleware([
     'auth:sanctum',
