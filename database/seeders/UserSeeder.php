@@ -3,11 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Database\Factories\UserFactory;
-use Faker\Factory;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
@@ -16,11 +14,22 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
+        $userAdmin = User::create([
             "name" => "Georkis",
             "email" => "georkis.santiesteban@gmail.com",
-            "password" => Hash::make(value: '123456')
+            "password" => Hash::make(value: '123456'),
         ]);
+
+        $userAdmin->assignRole("Admin");
+
+        $moderador = User::create([
+            "name" => "Modedador",
+            "email" => "moderadores@jovenclub.com",
+            "password" => Hash::make(value: "123456"),
+        ]);
+
+        $moderador->assignRole('Staff');
+
         User::factory()->count(count: 10)->create();
     }
 }
